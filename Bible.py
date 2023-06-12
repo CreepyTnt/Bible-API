@@ -71,16 +71,22 @@ def get_verse_from_string(string, translation='esv'):
 
 
 
-def search(query, translation):
+def search(query, translation='esv'):
     response = requests.get(f'https://biblia.com/search?query={query}&resources={translation}&contentType=js')
     if response.status_code == 200:
         # Request was successful
         content = response.text  # Get the content of the webpage as a string
         data = json.loads(content)['results']
         results = []
+        result = {}
         for i in data:
-            #print (i['title'])
-            results.append(get_verse_from_string(i['title']))
+            result['title'] = i['title']
+            result['text'] = (get_verse_from_string(i['title']))
+            results.append(result)
+
+
         return results
     else:
         return 'error'
+    
+
